@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend',
     'rest_framework',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'elastic'
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,13 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
     'SIGNING_KEY': os.getenv('JWT_SECRET_KEY', SECRET_KEY)
     
+}
+
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'  # Modifica con l'host e la porta del tuo Elasticsearch
+    },
 }
 
 AUTH_USER_MODEL = 'backend.User'
