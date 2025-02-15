@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'backend',
     'rest_framework',
     'rest_framework_simplejwt',
-    'elastic'
+    'elastic',
+    'api_axi'
 ]
 
 MIDDLEWARE = [
