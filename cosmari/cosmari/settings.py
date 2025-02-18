@@ -63,11 +63,19 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+
 '''CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Porta di React/Vite
     "http://127.0.0.1:5173",  # Alternativa per localhost
 ]
 '''
+
+
+SESSION_COOKIE_SAMESITE = 'None'  # Consenti l'invio di cookie tra origini
+CSRF_COOKIE_SAMESITE = 'None'     # Consenti l'invio di cookie CSRF tra origini
+SESSION_COOKIE_SECURE = True      # Richiesto se usi 'SameSite=None'
+CSRF_COOKIE_SECURE = True         # Richiesto se usi 'SameSite=None'
 ROOT_URLCONF = 'cosmari.urls'
 
 TEMPLATES = [
