@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "cosmari.backend.middlewares.JWTAuthMiddleware",
+    "backend.middlewares.JWTAuthMiddleware",
 ]
 
 ROOT_URLCONF = 'cosmari.urls'
