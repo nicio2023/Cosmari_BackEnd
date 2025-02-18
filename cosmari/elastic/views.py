@@ -1,8 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .client import es_client
+from decorators import jwt_required
 
-@api_view(["POST"])  
+@api_view(["POST"])
+@jwt_required
+
+#Ottiene l'indice richiesto da elastic
 def get_index(request):
     index_name = request.data.get("index")  
     if not index_name:

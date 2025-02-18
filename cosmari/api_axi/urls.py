@@ -11,3 +11,8 @@ urlpatterns = [
     path('vehicle_delay/', get_vehicle_details_with_delay, name='get_vehicle_details_with_delay'),
      
 ]
+
+
+
+
+

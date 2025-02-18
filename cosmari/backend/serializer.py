@@ -12,13 +12,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['email', 'firstname', 'lastname', 'password']
 
     def validate_email(self, value):
-        """Verifica se l'email è già presente nel database"""
+        if not value.endswith('@cosmari.it'):
+            raise serializers.ValidationError("L'email deve essere un'email aziendale")
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("An account with this email already exists.")
         return value
 
     def create(self, validated_data):
-        """Crea un nuovo utente e ritorna l'oggetto user"""
         user = User.objects.create_user(
             email=validated_data['email'],
             firstname=validated_data['firstname'],

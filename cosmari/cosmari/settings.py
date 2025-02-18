@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "cosmari.backend.middlewares.JWTAuthMiddleware",
 ]
 
 ROOT_URLCONF = 'cosmari.urls'
@@ -135,9 +136,13 @@ SIMPLE_JWT = {
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'localhost:9200'  # Modifica con l'host e la porta del tuo Elasticsearch
+        'hosts': 'localhost:9200'  
     },
 }
+
+
+
+
 
 AUTH_USER_MODEL = 'backend.User'
 
