@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'elastic',
-    'api_axi'
+    'api_axi',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -57,8 +58,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "backend.middlewares.JWTAuthMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+'''CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Porta di React/Vite
+    "http://127.0.0.1:5173",  # Alternativa per localhost
+]
+'''
 ROOT_URLCONF = 'cosmari.urls'
 
 TEMPLATES = [
