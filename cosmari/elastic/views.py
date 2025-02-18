@@ -5,7 +5,6 @@ from decorators import jwt_required
 
 @api_view(["POST"])
 @jwt_required
-
 #Ottiene l'indice richiesto da elastic
 def get_index(request):
     index_name = request.data.get("index")  
