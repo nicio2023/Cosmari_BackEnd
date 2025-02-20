@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import get_api_token, get_vehicle_plates, get_vehicle_details, get_my_vehicles_info, get_vehicle_details_with_delay
+from .views import (get_api_token, get_vehicle_plates, get_vehicle_details,
+                    get_my_vehicles_info, get_vehicle_details_with_delay, get_vehicle_info_by_interval)
 
 
 
@@ -9,7 +10,9 @@ urlpatterns = [
     path('vehicle/', get_vehicle_details, name='get_vehicle_details'),
     path('vehicles/', get_my_vehicles_info, name='get_my_vehicles_info'),
     path('vehicle_delay/', get_vehicle_details_with_delay, name='get_vehicle_details_with_delay'),
-     
+
+    path('vehicle_interval/', get_vehicle_info_by_interval, name='get_vehicle_info_by_interval')
+
 ]
 
 

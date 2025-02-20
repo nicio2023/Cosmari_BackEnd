@@ -221,3 +221,40 @@ def get_vehicle_details_with_delay(request):
             return get_vehicle_details_with_delay(request)
         else:
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+@jwt_required
+def get_vehicle_info_by_interval(request):
+    global saved_token
+    try:
+        if not saved_token:
+            saved_token = refresh_token()
+        data = json.loads(request.body)
+        plate = data.get("plate")
+        datestart = data.get("datestart")
+        dateend = data.get("dateend")
+        if not plate or not datestart or not dateend:
+            return JsonResponse({"status": "error", "message": "Parametri mancanti"}, status=400)
+        details_url = "https://api.axitea.it/api/Vehicle/GetInfoVehicleByInterval"
+        payload = {
+            "clientId": saved_token,
+            "plate": plate,
+            "datestart": datestart,
+            "dateend": dateend
+        }
+        headers = {"Content-Type": "application/json"}
+        response = requests.post(details_url, json=payload, headers=headers)
+        json_data = handle_api_response(response)
+        if json_data:
+            return JsonResponse({"status": "success", "data": json_data})
+        else:
+            return JsonResponse({"status": "error", "message": "Errore nel recupero dei dettagli con intervallo"}, status=500)
+    except ValueError as e:
+        print(f"Errore: {e}")
+        if str(e) == "Token scaduto":
+            saved_token = refresh_token()
+            return get_vehicle_details_with_delay(request)
+        else:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
