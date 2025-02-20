@@ -31,25 +31,22 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
             response = JsonResponse({"message": "Login successful"})
+            print(access_token)
             response.set_cookie(
                 key="access_token",
                 value=access_token,
                 max_age=6 * 60 * 60,
-                httponly=True,
-                secure=True,
+                httponly=False,
+                secure=False,
                 samesite="Lax",
-                domain="localhost",
-                path="/"
             )
             response.set_cookie(
                 key="refresh_token",
                 max_age=6 * 60 * 60,
                 value=str(refresh),
-                httponly=True,
-                secure=True,
+                httponly=False,
+                secure=False,
                 samesite="Lax",
-                domain="localhost",
-                path="/"
             )
             return response
         return JsonResponse({"error": "Invalid credentials"}, status=401)
