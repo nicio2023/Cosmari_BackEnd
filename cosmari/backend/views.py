@@ -34,16 +34,22 @@ class LoginView(APIView):
             response.set_cookie(
                 key="access_token",
                 value=access_token,
+                max_age=6 * 60 * 60,
                 httponly=True,
                 secure=True,
-                samesite="Lax"
+                samesite="Lax",
+                domain="localhost",
+                path="/"
             )
             response.set_cookie(
                 key="refresh_token",
+                max_age=6 * 60 * 60,
                 value=str(refresh),
                 httponly=True,
                 secure=True,
-                samesite="Lax"
+                samesite="Lax",
+                domain="localhost",
+                path="/"
             )
             return response
         return JsonResponse({"error": "Invalid credentials"}, status=401)
