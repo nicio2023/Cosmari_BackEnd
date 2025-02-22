@@ -42,7 +42,6 @@ def refresh_token():
 # Vista per ottenere il token
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_api_token(request):
     global saved_token
     token_url = "https://prod.backendkeplero.assist-web.eu:8443/keplero/public/token.kpl"
@@ -66,7 +65,6 @@ def get_api_token(request):
 
 @csrf_exempt
 @require_http_methods(["GET"])
-@jwt_required
 def get_mission_data(request):
     global saved_token
 
@@ -125,7 +123,6 @@ def get_mission_data(request):
 
 @csrf_exempt
 @require_http_methods(["GET"])
-@jwt_required
 def get_assets_tracking(request):
     global saved_token
 
