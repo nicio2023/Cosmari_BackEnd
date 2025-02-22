@@ -64,7 +64,6 @@ class LogoutView(APIView):
         response.delete_cookie("refresh_token")
         return response
 
-
 class RefreshTokenView(APIView):
     """Endpoint per rinnovare il token di accesso usando il refresh token salvato nel cookie"""
     def post(self, request):
