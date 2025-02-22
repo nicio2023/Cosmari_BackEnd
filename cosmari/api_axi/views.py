@@ -65,7 +65,6 @@ def refresh_token():
 # Vista per ottenere il token
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_api_token(request):
     global saved_token
     token_url = "https://api.axitea.it/api/Auth/GetToken"
@@ -89,7 +88,6 @@ def get_api_token(request):
 # Vista per ottenere la lista delle targhe
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_vehicle_plates(request):
     global plates, saved_token
     if plates:
@@ -119,7 +117,6 @@ def get_vehicle_plates(request):
 # Vista per ottenere i dettagli di un veicolo
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_vehicle_details(request):
     global saved_token
     try:
@@ -157,7 +154,6 @@ def get_vehicle_details(request):
 # Vista per ottenere le informazioni sulla flotta di veicoli
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_my_vehicles_info(request):
     global saved_token
     try:
@@ -188,7 +184,6 @@ def get_my_vehicles_info(request):
 # Vista per ottenere i dettagli di un veicolo con ritardo
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_vehicle_details_with_delay(request):
     global saved_token
     try:
@@ -225,7 +220,6 @@ def get_vehicle_details_with_delay(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
 def get_vehicle_info_by_interval(request):
     global saved_token
     try:
