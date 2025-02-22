@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.conf import settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, generics
@@ -31,25 +31,22 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
             response = JsonResponse({"message": "Login successful"})
+            print(access_token)
             response.set_cookie(
                 key="access_token",
                 value=access_token,
-                max_age=6 * 60 * 60,
-                httponly=True,
-                secure=True,
-                samesite="Lax",
-                domain="localhost",
-                path="/"
+                expires= settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
             response.set_cookie(
                 key="refresh_token",
-                max_age=6 * 60 * 60,
                 value=str(refresh),
-                httponly=True,
-                secure=True,
-                samesite="Lax",
-                domain="localhost",
-                path="/"
+                expires=settings.SIMPLE_JWT['SLIDING_TOKEN_REFRESH_LIFETIME'],
+                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
             return response
         return JsonResponse({"error": "Invalid credentials"}, status=401)
