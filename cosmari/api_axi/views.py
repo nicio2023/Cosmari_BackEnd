@@ -7,40 +7,13 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 from decorators import jwt_required
+from utils import handle_api_response
+
 # Variabili globali per memorizzare il token e la lista delle targhe
 saved_token = None
 plates = None
 load_dotenv()
 
-# Funzione di utilità per gestire le risposte API in un unico punto
-def handle_api_response(response):
-    """
-    Gestisce la risposta dell'API, rimuove il BOM e verifica lo status code.
-    Se il token è scaduto o si verifica un errore generico, solleva un'eccezione.
-    """
-    global saved_token
-    try:
-        cleaned_text = response.text.encode('utf-8').decode('utf-8-sig')
-        json_data = json.loads(cleaned_text)
-    except json.JSONDecodeError as e:
-        print("Errore nel parsing JSON:", e)
-        return None
-    if response.status_code != 200:
-        print(f"Errore nella richiesta. Status code: {response.status_code}")
-        if json_data.get("Message") == "An error has occurred.":
-            print("Errore generico dell'API, possibile token scaduto")
-            raise ValueError("Token scaduto")
-        if json_data.get("errorMessage") == "AccountInfo is not valid":
-            print("Token scaduto o non valido")
-            raise ValueError("Token scaduto")
-        # Altri errori non gestiti
-        raise ValueError(f"Errore non gestito: {response.text}")
-    if response.status_code == 200:
-        if json_data.get("errorMessage") == "AccountInfo is not valid":
-            print("Token scaduto o non valido")
-            saved_token = None
-            raise ValueError("Token scaduto")
-    return json_data
 
 # Questa funzione mi serve per ottenere un nuovo token quando quello vecio è scaduto
 def refresh_token():
