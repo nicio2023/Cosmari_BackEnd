@@ -70,12 +70,20 @@ def get_mission_data(request):
 
     try:
         # Recupera i parametri GET dalla richiesta
-        starttime = request.GET.get("starttime")
-        endtime = request.GET.get("endtime")
+        starttime_str = request.GET.get('starttime')
+        endtime_str = request.GET.get('endtime')
         snmachine = request.GET.getlist("snmachine")  # Otteniamo una lista di serial number
 
+        try:
+            #Converti le stringhe in interi
+            starttime = int(starttime_str)
+            endtime = int(endtime_str)
+        except (ValueError, TypeError):
+            return JsonResponse({"status": "error", "message": "starttime e endtime devono essere numeri validi."},
+                                status=400)
+
         # Controllo validità dell'intervallo di date
-        if starttime and endtime and not validate_date_range(starttime, endtime,1,7):
+        if starttime and endtime and not validate_date_range(starttime, endtime,0,7):
             return JsonResponse({"status": "error", "message": "Intervallo di date non valido (deve essere tra 1 e 7 giorni)"}, status=400)
 
         # Se il token non è disponibile o è scaduto, aggiorniamolo
@@ -88,9 +96,9 @@ def get_mission_data(request):
         # Creazione dei parametri della richiesta
         params = {}
         if starttime:
-            params["starttime"] = starttime
+            params["starttime"] = starttime_str
         if endtime:
-            params["endtime"] = endtime
+            params["endtime"] = endtime_str
         if snmachine:  # Solo se snmachine è fornito
             params["snmachine"] = ",".join(snmachine)  # Unisci la lista in una stringa separata da virgole
 
@@ -127,18 +135,27 @@ def get_assets_tracking(request):
     global saved_token
 
     try:
-        # Recupero dei parametri GET con conversione forzata a stringa (evita liste)
-        starttime = request.GET.get("starttime", "").strip()
-        endtime = request.GET.get("endtime", "").strip()
 
-        print(f"starttime: {starttime} ({type(starttime)})")
-        print(f"endtime: {endtime} ({type(endtime)})")
+        starttime_str = request.GET.get('starttime')
+        endtime_str = request.GET.get('endtime')
+
+        print(f"starttime: {starttime_str} ({type(starttime_str)})")
+        print(f"endtime: {endtime_str} ({type(endtime_str)})")
+
+        try:
+            # Converti le stringhe in interi
+            starttime = int(starttime_str)
+            endtime = int(endtime_str)
+        except (ValueError, TypeError):
+            return JsonResponse({"status": "error", "message": "starttime e endtime devono essere numeri validi."},
+                                status=400)
 
         # Controllo validità dell'intervallo di date
-        if starttime and endtime and not validate_date_range(starttime, endtime, 1, 3):
+        if starttime and endtime and not validate_date_range(starttime, endtime, 0, 3):
             return JsonResponse(
                 {"status": "error", "message": "Intervallo di date non valido (deve essere tra 1 e 3 giorni)"},
                 status=400)
+
 
         # Se il token non è disponibile o è una lista (errore), aggiorniamolo
         if not saved_token:
@@ -150,9 +167,9 @@ def get_assets_tracking(request):
         # Creazione dei parametri della richiesta
         params = {}
         if starttime:
-            params["starttime"] = starttime
+            params["starttime"] = starttime_str
         if endtime:
-            params["endtime"] = endtime
+            params["endtime"] = endtime_str
 
         # Header con il token di autenticazione
         headers = {
