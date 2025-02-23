@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def handle_api_response(response):
@@ -40,11 +40,16 @@ def handle_api_response(response):
 
 def validate_date_range(starttime, endtime, firstday, lastday):
     """
-    Verifica che l'intervallo tra starttime ed endtime sia tra 1 e 7 giorni.
-    """
+       Verifica che l'intervallo tra starttime ed endtime sia compreso tra min_days e max_days.
+       Considera anche intervalli inferiori a 24 ore come validi.
+       """
     if not starttime or not endtime:
         return True  # Se uno dei due è assente, non facciamo la validazione
-    start_date = datetime.utcfromtimestamp(int(starttime))
-    end_date = datetime.utcfromtimestamp(int(endtime))
+
+    # Converti i timestamp in oggetti datetime
+    start_date = datetime.fromtimestamp(starttime, tz=timezone.utc)
+    end_date = datetime.fromtimestamp(endtime, tz=timezone.utc)
+
     delta = end_date - start_date
-    return firstday <= delta.days <= lastday
+
+    return firstday <= delta.total_seconds() / 86400 <= lastday
