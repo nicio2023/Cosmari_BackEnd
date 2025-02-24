@@ -74,13 +74,18 @@ def get_mission_data(request):
         endtime_str = request.GET.get('endtime')
         snmachine = request.GET.getlist("snmachine")  # Otteniamo una lista di serial number
 
-        try:
-            #Converti le stringhe in interi
-            starttime = int(starttime_str)
-            endtime = int(endtime_str)
-        except (ValueError, TypeError):
-            return JsonResponse({"status": "error", "message": "starttime e endtime devono essere numeri validi."},
-                                status=400)
+        # Definisci le variabili con un valore di default (None)
+        starttime = None
+        endtime = None
+
+        if starttime_str is not None or endtime_str is not None:
+            try:
+                # Converti le stringhe in interi
+                starttime = int(starttime_str)
+                endtime = int(endtime_str)
+            except (ValueError, TypeError):
+                return JsonResponse({"status": "error", "message": "starttime e endtime devono essere numeri validi."},
+                                    status=400)
 
         # Controllo validità dell'intervallo di date
         if starttime and endtime and not validate_date_range(starttime, endtime,0,7):
@@ -142,12 +147,17 @@ def get_assets_tracking(request):
         print(f"starttime: {starttime_str} ({type(starttime_str)})")
         print(f"endtime: {endtime_str} ({type(endtime_str)})")
 
-        try:
-            # Converti le stringhe in interi
-            starttime = int(starttime_str)
-            endtime = int(endtime_str)
-        except (ValueError, TypeError):
-            return JsonResponse({"status": "error", "message": "starttime e endtime devono essere numeri validi."},
+        # Definisci le variabili con un valore di default (None)
+        starttime = None
+        endtime = None
+
+        if starttime_str is not None or endtime_str is not None:
+            try:
+                # Converti le stringhe in interi
+                starttime = int(starttime_str)
+                endtime = int(endtime_str)
+            except (ValueError, TypeError):
+                return JsonResponse({"status": "error", "message": "starttime e endtime devono essere numeri validi."},
                                 status=400)
 
         # Controllo validità dell'intervallo di date

@@ -7,7 +7,6 @@ from .utils.validations import check_plate_exists
 
 
 @api_view(["POST"])
-@jwt_required
 # Ottiene l'indice richiesto da elastic
 def get_index(request):
     index_name = request.data.get("index")
@@ -27,25 +26,6 @@ def get_index(request):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
-
-@api_view(["POST"])
-@jwt_required
-def create_index(request):
-    """
-    API per creare un nuovo indice in Elasticsearch basato sulla targa.
-    """
-    plate_name = request.data.get("plate")
-    if not plate_name:
-        return Response({"error": "Missing 'index' parameter"}, status=400)
-    # Verifica se la targa esiste
-    if not check_plate_exists(plate_name):
-        return Response({"error": "The plate doesn't exist"}, status=400)
-
-    if es_client.indices.exists(index=plate_name):
-        return Response({"error": "This plate had already added"}, status=400)
-
-    es_client.indices.create(index=plate_name)
-    return {"message": f"Index {plate_name} successfully created"}
 
 
 
