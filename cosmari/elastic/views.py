@@ -2,14 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .client import es_client
 from decorators import jwt_required
-import requests
-from .utils.validations import check_plate_exists
-
 
 @api_view(["POST"])
-# Ottiene l'indice richiesto da elastic
+#Ottiene l'indice richiesto da elastic
 def get_index(request):
-    index_name = request.data.get("index")
+    index_name = request.data.get("index")  
     if not index_name:
         return Response({"error": "Missing 'index' parameter"}, status=400)
     try:
@@ -17,15 +14,11 @@ def get_index(request):
         total_documents = count_response["count"]
         query = {
             "query": {
-                "match_all": {}
+                "match_all": {} 
             },
-            "size": total_documents
+            "size": total_documents 
         }
         response = es_client.search(index=index_name, body=query)
-        return Response(response["hits"]["hits"])
+        return Response(response["hits"]["hits"])  
     except Exception as e:
         return Response({"error": str(e)}, status=500)
-
-
-
-

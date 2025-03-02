@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_users, create_user, LoginView, RegisterView, LogoutView
+from .views import get_users, create_user, LoginView, RegisterView, LogoutView, RefreshTokenView
 from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -21,6 +21,6 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('refresh/', RefreshTokenView.as_view(), name='token_refresh'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui')
 ]
