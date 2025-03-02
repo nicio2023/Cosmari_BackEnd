@@ -11,7 +11,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework_simplejwt.views import  TokenRefreshView
+from rest_framework_simplejwt.exceptions import InvalidToken
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
@@ -56,12 +57,20 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        response = JsonResponse({"message": "Logged out successfully"})
+        refresh_token = request.COOKIES.get("refresh_token")
+        if refresh_token:
+            try:
+                refresh = RefreshToken(refresh_token)
+                refresh.blacklist()
+            except Exception as e:
+                return Response({"errore": "Token non inserito nella blacklist!!"+ str(e)}, status=500)
+        response = JsonResponse({"message": "Logged out successfully"}, status=200)
         response.delete_cookie("access_token")
         response.delete_cookie("refresh_token")
         return response
 
-class RefreshTokenView(APIView):
+
+class RefreshTokenView(TokenRefreshView):
     """Endpoint per rinnovare il token di accesso usando il refresh token salvato nel cookie"""
     def post(self, request):
         refresh_token = request.COOKIES.get("refresh_token")
@@ -74,13 +83,14 @@ class RefreshTokenView(APIView):
             response.set_cookie(
                 key="access_token",
                 value=new_access_token,
-                httponly=True,
-                secure=True,
-                samesite="Lax"
+                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
             return response
-        except Exception:
-            return JsonResponse({"error": "Invalid refresh token"}, status=400)
+        except InvalidToken :
+            return JsonResponse({"error": "Invalid token"}, status=401)
 
 @api_view(['GET'])
 def get_users(request):
