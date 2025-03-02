@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('backend/', include('backend.urls')),
     path('elastic/', include('elastic.urls')),
-    path('api/',include('api_axi.urls'))
+    path('api/',include('api_axi.urls')),
+    path('api/', include('api_bucher.urls'))
+
 ]
