@@ -29,7 +29,6 @@ class LoginView(APIView):
         password = request.data.get("password")
         user = authenticate(request, email=email, password=password)
         if user is not None:
-
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
             response = JsonResponse({"message": "Login successful"})

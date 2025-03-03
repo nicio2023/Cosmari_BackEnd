@@ -6,8 +6,7 @@ from decorators import jwt_required
 @api_view(["POST"])
 #Ottiene l'indice richiesto da elastic
 def get_index(request):
-    if not request.COOKIES.get("access_token"):
-        return Response({"status": "error", "message": "Non sei autenticato"}, status=401)
+
     index_name = request.data.get("index")  
     if not index_name:
         return Response({"error": "Missing 'index' parameter"}, status=400)

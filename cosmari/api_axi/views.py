@@ -5,6 +5,8 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from decorators import jwt_required
 
@@ -66,10 +68,10 @@ def refresh_token():
 # Vista per ottenere il token
 @csrf_exempt
 @require_http_methods(["POST"])
+@permission_classes([IsAuthenticated])
 def get_api_token(request):
     global saved_token
-    if not request.COOKIES.get("access_token"):
-        return JsonResponse({"status": "error", "message": "Non sei autenticato"}, status=401)
+
     token_url = "https://api.axitea.it/api/Auth/GetToken"
     payload = {
         "codiceCliente": os.getenv("CLIENT_CODE")
@@ -91,10 +93,9 @@ def get_api_token(request):
 # Vista per ottenere la lista delle targhe
 @csrf_exempt
 @require_http_methods(["POST"])
+@permission_classes([IsAuthenticated])
 def get_vehicle_plates(request):
     global plates, saved_token
-    if not request.COOKIES.get("access_token"):
-        return JsonResponse({"status": "error", "message": "Non sei autenticato"}, status=401)
     if plates:
         return JsonResponse({"status": "success", "data": plates})
     try:
@@ -122,10 +123,10 @@ def get_vehicle_plates(request):
 # Vista per ottenere i dettagli di un veicolo
 @csrf_exempt
 @require_http_methods(["POST"])
+@permission_classes([IsAuthenticated])
 def get_vehicle_details(request):
     global saved_token
-    if not request.COOKIES.get("access_token"):
-        return JsonResponse({"status": "error", "message": "Non sei autenticato"}, status=401)
+
     try:
         if not saved_token:
             saved_token = refresh_token()
@@ -161,10 +162,10 @@ def get_vehicle_details(request):
 # Vista per ottenere le informazioni sulla flotta di veicoli
 @csrf_exempt
 @require_http_methods(["POST"])
+@permission_classes([IsAuthenticated])
 def get_my_vehicles_info(request):
     global saved_token
-    if not request.COOKIES.get("access_token"):
-        return JsonResponse({"status": "error", "message": "Non sei autenticato"}, status=401)
+
     try:
         if not saved_token:
             saved_token = refresh_token()
@@ -193,10 +194,10 @@ def get_my_vehicles_info(request):
 # Vista per ottenere i dettagli di un veicolo con ritardo
 @csrf_exempt
 @require_http_methods(["POST"])
+@permission_classes([IsAuthenticated])
 def get_vehicle_details_with_delay(request):
     global saved_token
-    if not request.COOKIES.get("access_token"):
-        return JsonResponse({"status": "error", "message": "Non sei autenticato"}, status=401)
+
     try:
         if not saved_token:
             saved_token = refresh_token()
@@ -231,10 +232,10 @@ def get_vehicle_details_with_delay(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
+@permission_classes([IsAuthenticated])
 def get_vehicle_info_by_interval(request):
     global saved_token
-    if not request.COOKIES.get("access_token"):
-        return JsonResponse({"status": "error", "message": "Non sei autenticato"}, status=401)
+
     try:
         if not saved_token:
             saved_token = refresh_token()
