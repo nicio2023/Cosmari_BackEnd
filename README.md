@@ -1,4 +1,4 @@
-This is an excellent project that highlights several in-demand skills in data engineering and back-end development. This README focuses specifically on the back-end components, architecture, and deployment, using the Python/Django stack described in the document.
+This is a project that highlights several in-demand skills in data engineering and back-end development. This README focuses specifically on the back-end components, architecture, and deployment, using the Python/Django stack described in the document.
 
 **🚀 Cosmari Vehicle Data Integration Platform (Back-End)**
 
