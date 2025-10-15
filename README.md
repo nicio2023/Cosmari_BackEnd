@@ -30,12 +30,3 @@ Transformation: Data undergoes extensive cleaning, normalization, format convers
 Loading: The standardized data is indexed and stored in Elasticsearch for optimal querying and real-time visualization on the dashboard.
 
 The system also integrates PostgreSQL for structured, transactional data storage and utilizes dedicated API integration apps to manage diverse formatsand authentication mechanisms required by external services.
-
-
-**⚙️ Setup**
-
-To set up the back-end environment locally, you'll need Docker and Docker Compose installed.
-
--Docker
--Docker Compose (or equivalent containerization tools)
--Python 3.13
